@@ -32,7 +32,7 @@ class DemoEvent implements ShouldBroadcast
     public function broadcastOn(): array
     {
         return [
-            new PrivateChannel('DemoChannel.{$this->user->id}'),
+            new PrivateChannel("DemoChannel.{$this->user->id}"),
         ];
     }
 }
