@@ -1,13 +1,29 @@
 <script setup>
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import ApplicationLogo from '@/Components/ApplicationLogo.vue';
 import Dropdown from '@/Components/Dropdown.vue';
 import DropdownLink from '@/Components/DropdownLink.vue';
 import NavLink from '@/Components/NavLink.vue';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink.vue';
 import { Link } from '@inertiajs/vue3';
+import { useToast } from 'vue-toastification';
 
+const toast = useToast();
+const props = defineProps({
+  user: Object
+});
 const showingNavigationDropdown = ref(false);
+
+onMounted(() => {
+  const channel = `DemoChannel.${props.user.id}`;
+  console.log('AuthenticatedLayout mounted. \n Listening on channel: ' + channel);
+  Echo.private(channel).listen('DemoEvent', (e) => {
+    console.table(e);
+    toast.success('Event received on web socket: ' + e.user.name);
+  }).error((err) => {
+    console.error('Error connecting to channel: ', err);
+  });
+});
 </script>
 
 <template>

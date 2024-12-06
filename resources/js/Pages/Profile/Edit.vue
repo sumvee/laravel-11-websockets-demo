@@ -3,7 +3,7 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import DeleteUserForm from './Partials/DeleteUserForm.vue';
 import UpdatePasswordForm from './Partials/UpdatePasswordForm.vue';
 import UpdateProfileInformationForm from './Partials/UpdateProfileInformationForm.vue';
-import { Head } from '@inertiajs/vue3';
+import {Head, usePage} from '@inertiajs/vue3';
 
 defineProps({
     mustVerifyEmail: {
@@ -12,13 +12,19 @@ defineProps({
     status: {
         type: String,
     },
+  user: {
+    type: Object,
+    required: true,
+  },
+
 });
+const user = usePage().props.auth.user;
 </script>
 
 <template>
     <Head title="Profile" />
 
-    <AuthenticatedLayout>
+    <AuthenticatedLayout :user="user">
         <template #header>
             <h2
                 class="text-xl font-semibold leading-tight text-gray-800"
