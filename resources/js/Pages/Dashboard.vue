@@ -1,6 +1,23 @@
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import { Head } from '@inertiajs/vue3';
+import {Head, usePage} from '@inertiajs/vue3';
+import axios from 'axios';
+import { useToast } from 'vue-toastification';
+const toast = useToast();
+
+defineProps(['user']);
+const user = usePage().props.auth.user;
+
+
+function handleClick() {
+  axios.post('/broadcast-demo-event', {'user':user.id}).then(response => {
+    toast.success('Demo Event Broadcasted!');
+  }).catch(error => {
+    toast.error('Failed to broadcast Demo Event.');
+  }).finally(() => {
+    console.log('Request completed');
+  });
+}
 </script>
 
 <template>
@@ -23,6 +40,9 @@ import { Head } from '@inertiajs/vue3';
                     <div class="p-6 text-gray-900">
                         You're logged in!
                     </div>
+                  <button @click="handleClick" class="mt-4 px-4 py-2 bg-blue-500 text-white rounded">
+                    Broadcast Demo Event
+                  </button>
                 </div>
             </div>
         </div>
